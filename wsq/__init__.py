@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 #  *-* coding: cp850 *-*
 
-from lib.MyNIST.NIST.fingerprint.functions import PILToRAW
 from lib.misc.TemporaryDirectory import TemporaryDirectory
 import os
 import random
 
 from PIL import Image
+
+from lib.misc.imageprocessing import PILToRAW
 
 
 libdir = os.path.split( os.path.abspath( __file__ ) )[ 0 ] + "/NBIS/"
