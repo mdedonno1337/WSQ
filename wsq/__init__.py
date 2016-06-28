@@ -11,7 +11,7 @@ from PIL import Image
 
 libdir = os.path.split( os.path.abspath( __file__ ) )[ 0 ] + "/NBIS/"
 
-class wsq:
+class WSQ:
     def __init__( self ):
         self.r = "2.25"
     

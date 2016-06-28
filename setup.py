@@ -20,7 +20,7 @@ finally:
     import os
     os.chdir( os.path.split( os.path.abspath( __file__ ) )[ 0 ] )
     
-    with open( "wsq/version.py", "w+" ) as fp:
+    with open( "WSQ/version.py", "w+" ) as fp:
         fp.write( "__version__ = '%s'" % version )
 
 ################################################################################
@@ -36,6 +36,6 @@ setup(
     author = 'Marco De Donno',
     author_email = 'Marco.DeDonno@unil.ch; mdedonno1337@gmail.com',
     packages = [
-        'wsq'
+        'WSQ'
     ],
  )
