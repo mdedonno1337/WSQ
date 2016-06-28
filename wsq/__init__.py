@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 #  *-* coding: cp850 *-*
 
+from MDmisc.TemporaryDirectory import TemporaryDirectory
+from MDmisc.imageprocessing import PILToRAW
 import os
 import random
 
 from PIL import Image
-
-from MDmisc.TemporaryDirectory import TemporaryDirectory
-from MDmisc.imageprocessing import PILToRAW
 
 
 libdir = os.path.split( os.path.abspath( __file__ ) )[ 0 ] + "/NBIS/"
