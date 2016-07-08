@@ -20,8 +20,6 @@ class WSQ:
             img, size = PILToRAW( img ), img.size
         
         with TemporaryDirectory() as tempdir:
-            os.chdir( tempdir )
-            
             with open( tempdir + "/img.raw", "wb+" ) as fp:
                 fp.write( img )
             
@@ -34,8 +32,6 @@ class WSQ:
     
     def decode( self, img ):
         with TemporaryDirectory() as tempdir:
-            os.chdir( tempdir )
-            
             with open( tempdir + "/img.wsq", "wb+" ) as fp:
                 fp.write( img )
             
