@@ -5,6 +5,7 @@ from MDmisc.TemporaryDirectory import TemporaryDirectory
 from MDmisc.imageprocessing import PILToRAW
 import os
 import random
+import subprocess
 
 from PIL import Image
 
@@ -23,8 +24,9 @@ class WSQ:
             with open( tempdir + "/img.raw", "wb+" ) as fp:
                 fp.write( img )
             
-            os.system( libdir + 'cwsq.exe %s wsq "img.raw" -raw_in %d,%d,%d,%d' % ( self.r, size[ 0 ], size[ 1 ], 8, res ) )
-    
+            cmd = libdir + 'cwsq.exe %s wsq "img.raw" -raw_in %d,%d,%d,%d' % (self.r, size[0], size[1], 8, res)
+            subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
+            
             with open( tempdir + "/img.wsq", "rb" ) as fp:
                 data = fp.read()
         
@@ -35,7 +37,8 @@ class WSQ:
             with open( tempdir + "/img.wsq", "wb+" ) as fp:
                 fp.write( img )
             
-            os.system( libdir + 'dwsq.exe raw "img.wsq" -raw_out' )
+            cmd = libdir + 'dwsq.exe raw "img.wsq" -raw_out'
+            subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
             
             with open( tempdir + "/img.raw", "rb" ) as fp:
                 data = fp.read()
