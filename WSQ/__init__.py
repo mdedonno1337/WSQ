@@ -4,13 +4,23 @@
 from MDmisc.TemporaryDirectory import TemporaryDirectory
 from MDmisc.imageprocessing import PILToRAW
 import os
+import platform
 import random
 import subprocess
 
 from PIL import Image
 
 
+
 libdir = os.path.split( os.path.abspath( __file__ ) )[ 0 ] + "/NBIS/"
+
+if platform.system() == "Windows":
+    cwsq = libdir + "cwsq.exe"
+    dwsq = libdir + "dwsq.exe"
+
+else:
+    cwsq = libdir + "cwsq"
+    dwsq = libdir + "dwsq"
 
 class WSQ:
     def __init__( self ):
@@ -24,7 +34,7 @@ class WSQ:
             with open( tempdir + "/img.raw", "wb+" ) as fp:
                 fp.write( img )
             
-            cmd = libdir + 'cwsq.exe %s wsq img.raw -raw_in %d,%d,%d,%d' % ( self.r, size[0], size[1], 8, res )
+            cmd = cwsq + ' %s wsq img.raw -raw_in %d,%d,%d,%d' % ( self.r, size[0], size[1], 8, res )
             cmd = cmd.split( " " )
             subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
             
@@ -38,7 +48,7 @@ class WSQ:
             with open( tempdir + "/img.wsq", "wb+" ) as fp:
                 fp.write( img )
             
-            cmd = libdir + 'dwsq.exe raw img.wsq -raw_out'
+            cmd = dwsq + ' raw img.wsq -raw_out'
             cmd = cmd.split( " " )
             subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
             
