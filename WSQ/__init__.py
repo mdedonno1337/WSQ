@@ -24,7 +24,8 @@ class WSQ:
             with open( tempdir + "/img.raw", "wb+" ) as fp:
                 fp.write( img )
             
-            cmd = libdir + 'cwsq.exe %s wsq "img.raw" -raw_in %d,%d,%d,%d' % (self.r, size[0], size[1], 8, res)
+            cmd = libdir + 'cwsq.exe %s wsq img.raw -raw_in %d,%d,%d,%d' % ( self.r, size[0], size[1], 8, res )
+            cmd = cmd.split( " " )
             subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
             
             with open( tempdir + "/img.wsq", "rb" ) as fp:
@@ -37,7 +38,8 @@ class WSQ:
             with open( tempdir + "/img.wsq", "wb+" ) as fp:
                 fp.write( img )
             
-            cmd = libdir + 'dwsq.exe raw "img.wsq" -raw_out'
+            cmd = libdir + 'dwsq.exe raw img.wsq -raw_out'
+            cmd = cmd.split( " " )
             subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
             
             with open( tempdir + "/img.raw", "rb" ) as fp:
