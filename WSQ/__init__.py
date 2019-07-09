@@ -10,8 +10,6 @@ import subprocess
 
 from PIL import Image
 
-
-
 libdir = os.path.split( os.path.abspath( __file__ ) )[ 0 ] + "/NBIS/"
 
 if platform.system() == "Windows":
@@ -56,8 +54,3 @@ class WSQ:
                 data = fp.read()
             
         return data
-
-try:
-    from .version import __version__
-except:
-    __version__ = "dev"
