@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from MDmisc.TemporaryDirectory import TemporaryDirectory
 from MDmisc.imageprocessing import PILToRAW
 import os
 import platform
 import random
 import subprocess
+import tempfile
 
 from PIL import Image
 
@@ -28,29 +28,37 @@ class WSQ:
         if isinstance( img, Image.Image ):
             img, size = PILToRAW( img ), img.size
         
-        with TemporaryDirectory() as tempdir:
-            with open( tempdir + "/img.raw", "wb+" ) as fp:
-                fp.write( img )
-            
-            cmd = cwsq + ' %s wsq img.raw -raw_in %d,%d,%d,%d' % ( self.r, size[0], size[1], 8, res )
-            cmd = cmd.split( " " )
-            subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
-            
-            with open( tempdir + "/img.wsq", "rb" ) as fp:
-                data = fp.read()
+        tempdir = tempfile.mkdtemp()
+        
+        with open( tempdir + "/img.raw", "wb+" ) as fp:
+            fp.write( img )
+        
+        cmd = cwsq + ' %s wsq img.raw -raw_in %d,%d,%d,%d' % ( self.r, size[0], size[1], 8, res )
+        cmd = cmd.split( " " )
+        subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
+        
+        with open( tempdir + "/img.wsq", "rb" ) as fp:
+            data = fp.read()
         
         return data
     
     def decode( self, img ):
-        with TemporaryDirectory() as tempdir:
-            with open( tempdir + "/img.wsq", "wb+" ) as fp:
-                fp.write( img )
-            
-            cmd = dwsq + ' raw img.wsq -raw_out'
-            cmd = cmd.split( " " )
-            subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
-            
-            with open( tempdir + "/img.raw", "rb" ) as fp:
-                data = fp.read()
-            
+        tempdir = tempfile.mkdtemp()
+        
+        with open( tempdir + "/img.wsq", "wb+" ) as fp:
+            fp.write( img )
+        
+        cmd = dwsq + ' raw img.wsq -raw_out'
+        cmd = cmd.split( " " )
+        subprocess.Popen( cmd, cwd = tempdir, stdout = subprocess.PIPE, stderr = subprocess.PIPE ).communicate()
+        
+        with open( tempdir + "/img.raw", "rb" ) as fp:
+            data = fp.read()
+        
+        try:
+            os.remove( tempdir + "/img.wsq" )
+            os.remove( tempdir + "/img.raw" )
+        except:
+            pass
+        
         return data
